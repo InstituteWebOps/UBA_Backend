@@ -51,25 +51,6 @@ router.post('/create/:id', function(req, res, next) {
         })
     }
 });
-router.post('/delete/:id', function(req, res, next) {
-    if (!table_list.indexOf(req.params.id)){
-        MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
-            var dbo = db.db("mydb");
-            var myquery = req.body.delete_data;
-            dbo.collection(req.params.id).deleteOne(myquery, function(error, obj) {
-                if (error) res.json(error);
-                res.json(obj);
-                db.close();
-            });
-        });
-    }else {
-        res.json({
-            RESULT : "No Table Found",
-            RESULT_CODE : 1081
-        })
-    }
-});
 
 
 module.exports = router;
