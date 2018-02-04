@@ -59,6 +59,7 @@ router.post('/create_many/:id', function(req, res, next) {
             dbo.collection(req.params.id).insertMany(JSON.parse(req.body.data), function(error, result) {
                 if (error) {res.json(error);}
                 else{
+                    console.log(req.body.data);
                     res.json(result);
                     db.close();
                 }
