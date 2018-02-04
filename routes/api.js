@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/read/:id', function(req, res, next) {
-    if (!table_list.indexOf(req.params.id)){
+    if (table_list.indexOf(req.params.id)+1){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
@@ -31,7 +31,7 @@ router.post('/read/:id', function(req, res, next) {
     }
 });
 router.post('/create/:id', function(req, res, next) {
-    if (!table_list.indexOf(req.params.id)){
+    if (table_list.indexOf(req.params.id)+1){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
@@ -52,7 +52,7 @@ router.post('/create/:id', function(req, res, next) {
     }
 });
 router.post('/create_many/:id', function(req, res, next) {
-    if (!table_list.indexOf(req.params.id)){
+    if (table_list.indexOf(req.params.id)+1){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
