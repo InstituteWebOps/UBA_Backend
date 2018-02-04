@@ -51,6 +51,28 @@ router.post('/create/:id', function(req, res, next) {
         })
     }
 });
+router.post('/create_many/:id', function(req, res, next) {
+    if (!table_list.indexOf(req.params.id)){
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db(db_name);
+            dbo.collection(req.params.id).insertMany(JSON.parse(req.body.data), function(error, result) {
+                if (error) {res.json(error);}
+                else{
+                    res.json(result);
+                    db.close();
+                }
+
+            });
+        });
+    }else {
+        res.json({
+            RESULT : "No Table Found",
+            RESULT_CODE : 1081
+        })
+    }
+});
+
 
 
 module.exports = router;
