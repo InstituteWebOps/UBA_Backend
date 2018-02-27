@@ -7,10 +7,10 @@ var table_list = ["location","data"];
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.json({RESULT : "UBA Api Service",STATUS : "Working",DB_NAME : db_name,TABLES_WORKING : table_list});
+    res.json({RESULT : "UBA Api Service",STATUS : "Working",DB_NAME : db_name,TABLES_WORKING : table_list});
 });
 
-router.post('/read/:id', function(req, res, next) {
+router.get('/read/:id', function(req, res, next) {
     if (table_list.indexOf(req.params.id)+1){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
