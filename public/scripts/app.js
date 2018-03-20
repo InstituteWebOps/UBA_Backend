@@ -2,7 +2,7 @@ var main_app = new Vue({
     el: '#main',
     data: {
         isLoading  : true,
-        number_of_data : 0
+        number_of_data : 0,
     },
     methods: {
         download_css: function(src) {
@@ -46,7 +46,7 @@ var main_app = new Vue({
         get_numbers: function(){
             axios.get(window.location.origin+'/api/get_numbers/data')
                 .then(function (response) {
-                    main_app.number_of_data = response.number_of_data;
+                    main_app.number_of_data = parseInt(response.number_of_data);
                     console.log(response.data.number_of_data);
                 })
                 .catch(function (error) {
