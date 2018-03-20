@@ -47,7 +47,7 @@ var main_app = new Vue({
             axios.get(window.location.origin+'/api/get_numbers/data')
                 .then(function (response) {
                     this.number_of_data = response.number_of_data;
-                    console.log(response.number_of_data);
+                    console.log(response.data.number_of_data);
                 })
                 .catch(function (error) {
                     console.log(error);
