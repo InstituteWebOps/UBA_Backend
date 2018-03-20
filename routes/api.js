@@ -35,10 +35,11 @@ router.get('/read', function(req, res, next) {
 
 router.get('/read/:collection_name/:data_id', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
+        ObjectId = require('mongodb').ObjectID;
         MongoClient.connect(url, function(err, db) {
             if (err) res.json(err);
             var dbo = db.db(db_name);
-            dbo.collection(req.params.collection_name).findOne({"_id" : req.params.data_id}, function(error, result) {
+            dbo.collection(req.params.collection_name).findOne({"_id" : new ObjectId(req.params.data_id)}, function(error, result) {
                 if (error) res.json(error);
                 res.json(result);
                 db.close();
