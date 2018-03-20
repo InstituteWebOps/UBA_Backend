@@ -7,6 +7,7 @@ var main_app = new Vue({
         limit: 20,
         isNext: false,
         isPrevious: false,
+        data_list : []
     },
     methods: {
         download_css: function(src) {
@@ -47,6 +48,16 @@ var main_app = new Vue({
             this.download_js("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js");
             this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
         },
+        get_data: function (skip,limit) {
+            axios.get(window.location.origin+'/api/read/data/'+skip+"/"+limit)
+                .then(function (response) {
+                    main_app.data_list = JSON.parse(response.data);
+                    console.log(main_app.data_list);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         get_numbers: function(){
             axios.get(window.location.origin+'/api/get_numbers/data')
                 .then(function (response) {
@@ -63,5 +74,6 @@ var main_app = new Vue({
         this.load_components();
         this.isLoading = !this.isLoading;
         this.get_numbers();
+        this.get_data(this.skip,this.limit);
     }
 });

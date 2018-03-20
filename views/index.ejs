@@ -11,10 +11,11 @@
           <div class=" col-sm-2">
           <h4>Total entry: <b style="font-family: 'Open Sans', sans-serif;">{{number_of_data}}</b></h4>
           </div>
-          <!--<div class=" col-sm-3">-->
-            <!--<input type="text" class="form-control" id="usr" placeholder="Search">-->
-          <!--</div>-->
-          <div class=" col-sm-1 col-sm-offset-7">
+          <div class=" col-sm-3">
+            <h4>Showing data from <b style="font-family: 'Open Sans', sans-serif;">{{skip+1}}</b> to <b style="font-family: 'Open Sans', sans-serif;">{{skip+limit}}</b></h4>
+
+          </div>
+          <div class=" col-sm-1 col-sm-offset-4">
           <button type="button" class="btn btn-warning">Next page</button>
           </div>
         </div>
@@ -23,16 +24,18 @@
         <table class="table table-striped" >
           <thead>
           <tr>
+            <th>SNo.</th>
             <th>ID</th>
-            <th>Submitted by</th>
             <th>Data</th>
+            <th>Submitted by</th>
           </tr>
           </thead>
           <tbody>
           <tr>
+            <td><b style="font-family: 'Open Sans', sans-serif;">1</b></td>
             <td>Default</td>
-            <td>Defaultson</td>
             <td>def@somemail.com</td>
+            <td>Defaultson</td>
           </tr>
           </tbody>
         </table>
