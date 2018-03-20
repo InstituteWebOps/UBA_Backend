@@ -3,7 +3,7 @@ var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 var db_name = "UBA_DB";
-var table_list = ["location","data"];
+var table_list = ["location"];
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
