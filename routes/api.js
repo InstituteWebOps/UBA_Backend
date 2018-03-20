@@ -52,7 +52,7 @@ router.get('/read/:collection_name/:data_id', function(req, res, next) {
         })
     }
 });
-router.get('/deleete/:collection_name/:data_id', function(req, res, next) {
+router.get('/delete/:collection_name/:data_id', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         ObjectId = require('mongodb').ObjectID;
         MongoClient.connect(url, function(err, db) {
