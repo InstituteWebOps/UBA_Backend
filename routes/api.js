@@ -3,7 +3,7 @@ var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 var db_name = "UBA_DB";
-var collection_list = ["location"];
+var collection_list = ["data"];
 var contains = function(needle) {
     var findNaN = needle !== needle;
     var indexOf;
