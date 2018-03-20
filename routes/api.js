@@ -30,6 +30,23 @@ router.get('/read/:id', function(req, res, next) {
         })
     }
 });
+router.get('/view/:id', function(req, res, next) {
+    if (table_list.indexOf(req.params.id)+1){
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db(db_name);
+            dbo.collection(req.params.id).count({}, function(error, numOfDocs) {
+                if (error) res.json(error);
+                res.json({"number_of_data":numOfDocs});
+            });
+        });
+    }else {
+        res.json({
+            RESULT : "No Table Found",
+            RESULT_CODE : 1081
+        })
+    }
+});
 router.post('/create/:id', function(req, res, next) {
     if (table_list.indexOf(req.params.id)+1){
         MongoClient.connect(url, function(err, db) {
