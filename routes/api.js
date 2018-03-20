@@ -3,19 +3,42 @@ var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 var db_name = "UBA_DB";
-var table_list = ["location"];
+var collection_list = ["location"];
+var contains = function(needle) {
+    var findNaN = needle !== needle;
+    var indexOf;
+    if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+            for(i = 0; i < this.length; i++) {
+                var item = this[i];
+                if((findNaN && item !== item) || item === needle) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        };
+    }
+    return indexOf.call(this, needle) > -1;
+};
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    res.json({RESULT : "UBA Api Service",STATUS : "Working",DB_NAME : db_name,TABLES_WORKING : table_list});
+    res.json({RESULT : "UBA Api Service",STATUS : "Working",DB_NAME : db_name,TABLES_WORKING : collection_list});
+});
+router.get('/read', function(req, res, next) {
+    res.json({TABLES_WORKING : collection_list});
 });
 
-router.get('/read/:id', function(req, res, next) {
-    if (table_list.indexOf(req.params.id)+1){
+router.get('/read/:collection_name', function(req, res, next) {
+    if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection(req.params.id).find({}).toArray(function(error, result) {
+            dbo.collection(req.params.collection_name).find({}).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     res.json(result);
@@ -30,12 +53,12 @@ router.get('/read/:id', function(req, res, next) {
         })
     }
 });
-router.get('/read/:id/:skip/:limit', function(req, res, next) {
-    if (table_list.indexOf(req.params.id)+1){
+router.get('/read/:collection_name/:skip/:limit', function(req, res, next) {
+    if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection(req.params.id).find({}).skip(req.params.skip).limit(req.params.skip).toArray(function(error, result) {
+            dbo.collection(req.params.collection_name).find({}).skip(req.params.skip).limit(req.params.skip).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     res.json(result);
@@ -51,12 +74,12 @@ router.get('/read/:id/:skip/:limit', function(req, res, next) {
     }
 });
 
-router.get('/get_numbers/:id', function(req, res, next) {
-    if (table_list.indexOf(req.params.id)+1){
+router.get('/get_numbers/:collection_name', function(req, res, next) {
+    if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection(req.params.id).count({}, function(error, numOfDocs) {
+            dbo.collection(req.params.collection_name).count({}, function(error, numOfDocs) {
                 if (error) res.json(error);
                 res.json({"number_of_data":numOfDocs});
             });
@@ -68,12 +91,12 @@ router.get('/get_numbers/:id', function(req, res, next) {
         })
     }
 });
-router.post('/create/:id', function(req, res, next) {
-    if (table_list.indexOf(req.params.id)+1){
+router.post('/create/:collection_name', function(req, res, next) {
+    if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection(req.params.id).insertOne(JSON.parse(req.body.data), function(error, result) {
+            dbo.collection(req.params.collection_name).insertOne(JSON.parse(req.body.data), function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     res.json(result);
@@ -89,12 +112,12 @@ router.post('/create/:id', function(req, res, next) {
         })
     }
 });
-router.post('/create_many/:id', function(req, res, next) {
-    if (table_list.indexOf(req.params.id)+1){
+router.post('/create_many/:collection_name', function(req, res, next) {
+    if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection(req.params.id).insertMany(JSON.parse(req.body.data), function(error, result) {
+            dbo.collection(req.params.collection_name).insertMany(JSON.parse(req.body.data), function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     console.log(req.body.data);
