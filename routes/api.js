@@ -30,7 +30,28 @@ router.get('/read/:id', function(req, res, next) {
         })
     }
 });
-router.get('/view/:id', function(req, res, next) {
+router.get('/read/:id/:skip/:limit', function(req, res, next) {
+    if (table_list.indexOf(req.params.id)+1){
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db(db_name);
+            dbo.collection(req.params.id).find({}).skip(req.params.skip).limit(req.params.skip)toArray(function(error, result) {
+                if (error) {res.json(error);}
+                else{
+                    res.json(result);
+                    db.close();
+                }
+            });
+        });
+    }else {
+        res.json({
+            RESULT : "No Table Found",
+            RESULT_CODE : 1081
+        })
+    }
+});
+
+router.get('/get_numbers/:id', function(req, res, next) {
     if (table_list.indexOf(req.params.id)+1){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
