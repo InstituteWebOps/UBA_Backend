@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
-var db_name = "UBA_DB";
+var url = "mongodb://joeydash:joeydash@ds135790.mlab.com:35790/joeydash";
+var db_name = "joeydash";
 var collection_list = ["data"];
 var contains = function(needle) {
     var findNaN = needle !== needle;
@@ -37,7 +37,7 @@ router.get('/read/:collection_name/:data_id', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         ObjectId = require('mongodb').ObjectID;
         MongoClient.connect(url, function(err, db) {
-            if (err) res.json(err);
+            if (err) throw err;
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).findOne({"_id" : new ObjectId(req.params.data_id)}, function(error, result) {
                 if (error) res.json(error);
@@ -56,7 +56,7 @@ router.get('/delete/:collection_name/:data_id', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         ObjectId = require('mongodb').ObjectID;
         MongoClient.connect(url, function(err, db) {
-            if (err) res.json(err);
+            if (err) throw err;
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).deleteOne({"_id" : new ObjectId(req.params.data_id)}, function(error, result) {
                 if (error) res.json(error);
@@ -75,7 +75,7 @@ router.get('/delete/:collection_name/:data_id', function(req, res, next) {
 router.get('/read/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) res.json(err);
+            if (err) throw err;
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).find({}).toArray(function(error, result) {
                 if (error) {res.json(error);}
@@ -95,7 +95,7 @@ router.get('/read/:collection_name', function(req, res, next) {
 router.get('/read/:collection_name/:skip/:limit', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) res.json(err);
+            if (err) throw err;
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).find({}).skip(parseInt(req.params.skip)).limit(parseInt(req.params.limit)).toArray(function(error, result) {
                 if (error) {res.json(error);}
@@ -116,7 +116,7 @@ router.get('/read/:collection_name/:skip/:limit', function(req, res, next) {
 router.get('/get_numbers/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) res.json(err);
+            if (err) throw err;
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).count({}, function(error, numOfDocs) {
                 if (error) res.json(error);
@@ -133,7 +133,7 @@ router.get('/get_numbers/:collection_name', function(req, res, next) {
 router.post('/create/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) res.json(err);
+            if (err) throw err;
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).insertOne(JSON.parse(req.body.data), function(error, result) {
                 if (error) {res.json(error);}
@@ -155,7 +155,7 @@ router.post('/update/:collection_name/:data_id', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         ObjectId = require('mongodb').ObjectID;
         MongoClient.connect(url, function(err, db) {
-            if (err) res.json(err);
+            if (err) throw err;
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).updateOne({"_id" : new ObjectId(req.params.data_id)},{$set:JSON.parse(req.body.data)}, function(error, result) {
                 if (error) res.json(error);
@@ -173,7 +173,7 @@ router.post('/update/:collection_name/:data_id', function(req, res, next) {
 router.post('/create_many/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) res.json(err);
+            if (err) throw err;
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).insertMany(JSON.parse(req.body.data), function(error, result) {
                 if (error) {res.json(error);}
@@ -182,7 +182,6 @@ router.post('/create_many/:collection_name', function(req, res, next) {
                     res.json(result);
                     db.close();
                 }
-
             });
         });
     }else {

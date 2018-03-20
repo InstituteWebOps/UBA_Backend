@@ -2,7 +2,7 @@ var main_app = new Vue({
     el: '#main',
     data: {
         isLoading  : true,
-        number_of_data : 0,
+        number_of_data : null,
         skip: 0,
         limit: 20,
         isNext: false,
@@ -51,8 +51,8 @@ var main_app = new Vue({
         get_data: function (skip,limit) {
             axios.get(window.location.origin+'/api/read/data/'+skip+"/"+limit)
                 .then(function (response) {
-                    main_app.data_list = JSON.parse(response.data);
-                    console.log(response.data);
+                    main_app.data_list = response.data;
+                    console.log(main_app.data_list[0].submitted_by);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -62,18 +62,24 @@ var main_app = new Vue({
             axios.get(window.location.origin+'/api/get_numbers/data')
                 .then(function (response) {
                     main_app.number_of_data = parseInt(response.data.number_of_data);
-                    console.log(response.data.number_of_data);
+                    // console.log(response.data.number_of_data);
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
+        },
+        is_table_needed : function () {
+            if (this.data_list.size >0)
+                return true;
+            else
+                return false;
         }
 
     },
     mounted: function () {
         this.load_components();
         this.isLoading = !this.isLoading;
-        // this.get_numbers();
-        // this.get_data(this.skip,this.limit);
+        this.get_numbers();
+        this.get_data(this.skip,this.limit);
     }
 });

@@ -1,26 +1,50 @@
 <!DOCTYPE html><html> <head> <title>Unnat Bharat Abhiyan</title> <link> <script src="https://unpkg.com/axios/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vue@2.5.14/dist/vue.js"></script> </head> <body> <div id="main" class="container-fluid"> <div id="loader" v-if="isLoading"> <div class="spinner"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1" width="32px" height="32px" viewBox="0 0 28 28"> <g class="qp-circular-loader"> <path class="qp-circular-loader-path" fill="none" d="M 14,1.5 A 12.5,12.5 0 1 1 1.5,14" stroke-linecap="round"/> </g> </svg> </div></div>
 
+
   <div id="app" v-if="!isLoading"style="padding: 40px;">
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Full Data</h4>
+          </div>
+          <div class="modal-body">
+            <p>Some text in the modal.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="row">z
       <div style="background: white;padding: 30px;" class="card col-sm-2"><b><center><img src="http://unnat.iitd.ac.in/app/webroot/images/logo.png"></center></b></div>
       <div class="card col-sm-12" style="background: white;padding: 30px;margin-top: 30px; margin-bottom: 30px;">
         <div class="row">
           <div class=" col-sm-2">
-            <button type="button" class="btn btn-warning">Previous page</button>
+            <button type="button" class="btn btn-warning">Previous</button>
           </div>
           <div class=" col-sm-2">
-          <h4>Total entry: <b style="font-family: 'Open Sans', sans-serif;">{{number_of_data}}</b></h4>
+          <h5>Total entry: <b style="font-family: 'Open Sans', sans-serif;">{{number_of_data}}</b></h5>
           </div>
           <div class=" col-sm-3">
-            <h4>Showing data from <b style="font-family: 'Open Sans', sans-serif;">{{skip+1}}</b> to <b style="font-family: 'Open Sans', sans-serif;">{{skip+limit}}</b></h4>
+            <h5>Showing data from <b style="font-family: 'Open Sans', sans-serif;">{{skip+1}}</b> to <b style="font-family: 'Open Sans', sans-serif;">{{skip+limit}}</b></h5>
 
           </div>
-          <div class=" col-sm-1 col-sm-offset-4">
-          <button type="button" class="btn btn-warning">Next page</button>
+          <div class=" col-sm-4">
+            <input placeholder="submitted by ...">
+          </div>
+          <div class=" col-sm-1 ">
+          <button type="button" class="btn btn-warning">Next</button>
           </div>
         </div>
       </div>
-      <div style="background: white;padding: 30px; margin-top: 30px;margin-bottom: 30px;" class="card table-responsive col-sm-12">
+      <div v-if="is_table_needed" style="background: white;padding: 30px; margin-top: 30px;margin-bottom: 30px;" class="card table-responsive col-sm-12">
         <table class="table table-striped" >
           <thead>
           <tr>
@@ -28,14 +52,16 @@
             <th>ID</th>
             <th>Data</th>
             <th>Submitted by</th>
+            <th>Action</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody v-for="item in data_list">
           <tr>
             <td><b style="font-family: 'Open Sans', sans-serif;">1</b></td>
             <td>Default</td>
-            <td>def@somemail.com</td>
-            <td>Defaultson</td>
+            <td><a data-toggle="modal" data-target="#myModal">Show data</a></td>
+            <td>{{item.submitted_by}}</td>
+            <td><button class="btn btn-danger"> Delete</button></td>
           </tr>
           </tbody>
         </table>
@@ -43,6 +69,9 @@
     </div>
 
   </div>
+
+
+
 </div></body><style>.spinner{margin:10px 20px;text-align:center;display:inline-block}.spinner svg{background-color:rgb(255,255,255);border-radius:50%;padding:8px;box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.qp-circular-loader{width:64px;height:64px;stroke-width:3px}.qp-circular-loader-path{stroke-dasharray:58.9;stroke-dashoffset:58.9}.qp-circular-loader,.qp-circular-loader *{-webkit-transform-origin:50% 50%;transform-origin:50% 50%}@-webkit-keyframes rotate{from{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(360deg)}}@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.qp-circular-loader{-webkit-animation-name:rotate;animation-name:rotate;-webkit-animation-duration:1568.63ms;animation-duration:1568.63ms;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes fillunfill{from{stroke-dashoffset:58.8}50%{stroke-dashoffset:0}to{stroke-dashoffset:-58.4}}@keyframes fillunfill{from{stroke-dashoffset:58.8}50%{stroke-dashoffset:0}to{stroke-dashoffset:-58.4}}@-webkit-keyframes rot{from{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(-360deg)}}@keyframes rot{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}@-webkit-keyframes colors{0%{stroke:#754fa0}20%{stroke:#09b7bf}40%{stroke:#90d36b}60%{stroke:#f2d40d}80%{stroke:#fcb12b}100%{stroke:#ed1b72}}@keyframes colors{0%{stroke:#754fa0}20%{stroke:#09b7bf}40%{stroke:#90d36b}60%{stroke:#f2d40d}80%{stroke:#fcb12b}100%{stroke:#ed1b72}}.qp-circular-loader-path{-webkit-animation-name:fillunfill,rot,colors;animation-name:fillunfill,rot,colors;-webkit-animation-duration:1333ms,5332ms,5332ms;animation-duration:1333ms,5332ms,5332ms;-webkit-animation-iteration-count:infinite,infinite,infinite;animation-iteration-count:infinite,infinite,infinite;-webkit-animation-timing-function:cubic-bezier(.4,0,.2,1),steps(4),linear;animation-timing-function:cubic-bezier(.4,0,.2,1),steps(4),linear;-webkit-animation-play-state:running,running,running;animation-play-state:running,running,running;-webkit-animation-fill-mode:forwards;animation-fill-mode:forwards}</style>
 
 <script>
