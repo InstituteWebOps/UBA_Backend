@@ -71,6 +71,7 @@ router.get('/delete/:collection_name/:data_id', function(req, res, next) {
         })
     }
 });
+
 router.get('/read/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
@@ -141,6 +142,25 @@ router.post('/create/:collection_name', function(req, res, next) {
                     db.close();
                 }
 
+            });
+        });
+    }else {
+        res.json({
+            RESULT : "No Table Found",
+            RESULT_CODE : 1081
+        })
+    }
+});
+router.post('/update/:collection_name/:data_id', function(req, res, next) {
+    if (contains.call(collection_list,req.params.collection_name)){
+        ObjectId = require('mongodb').ObjectID;
+        MongoClient.connect(url, function(err, db) {
+            if (err) res.json(err);
+            var dbo = db.db(db_name);
+            dbo.collection(req.params.collection_name).updateOne({"_id" : new ObjectId(req.params.data_id)},JSON.parse(req.body.data), function(error, result) {
+                if (error) res.json(error);
+                res.json(result);
+                db.close();
             });
         });
     }else {
