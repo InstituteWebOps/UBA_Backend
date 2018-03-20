@@ -52,7 +52,7 @@ var main_app = new Vue({
             axios.get(window.location.origin+'/api/read/data/'+skip+"/"+limit)
                 .then(function (response) {
                     main_app.data_list = JSON.parse(response.data);
-                    console.log(main_app.data_list);
+                    console.log(response.data);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -73,7 +73,7 @@ var main_app = new Vue({
     mounted: function () {
         this.load_components();
         this.isLoading = !this.isLoading;
-        this.get_numbers();
-        this.get_data(this.skip,this.limit);
+        // this.get_numbers();
+        // this.get_data(this.skip,this.limit);
     }
 });
