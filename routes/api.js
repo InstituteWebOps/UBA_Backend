@@ -52,6 +52,25 @@ router.get('/read/:collection_name/:data_id', function(req, res, next) {
         })
     }
 });
+router.get('/deleete/:collection_name/:data_id', function(req, res, next) {
+    if (contains.call(collection_list,req.params.collection_name)){
+        ObjectId = require('mongodb').ObjectID;
+        MongoClient.connect(url, function(err, db) {
+            if (err) res.json(err);
+            var dbo = db.db(db_name);
+            dbo.collection(req.params.collection_name).deleteOne({"_id" : new ObjectId(req.params.data_id)}, function(error, result) {
+                if (error) res.json(error);
+                res.json(result);
+                db.close();
+            });
+        });
+    }else {
+        res.json({
+            RESULT : "No Table Found",
+            RESULT_CODE : 1081
+        })
+    }
+});
 router.get('/read/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
