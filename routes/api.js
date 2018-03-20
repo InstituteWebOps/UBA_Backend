@@ -33,30 +33,28 @@ router.get('/read', function(req, res, next) {
     res.json({TABLES_WORKING : collection_list});
 });
 
-// router.get('/read/:collection_name/:data_id', function(req, res, next) {
-//     if (contains.call(collection_list,req.params.collection_name)){
-//         MongoClient.connect(url, function(err, db) {
-//             if (err) throw err;
-//             var dbo = db.db(db_name);
-//             dbo.collection(req.params.collection_name).find({},{"_id" : req.params.data_id}).toArray(function(error, result) {
-//                 if (error) {res.json(error);}
-//                 else{
-//                     res.json(result);
-//                     db.close();
-//                 }
-//             });
-//         });
-//     }else {
-//         res.json({
-//             RESULT : "No Table Found",
-//             RESULT_CODE : 1081
-//         })
-//     }
-// });
+router.get('/read/:collection_name/:data_id', function(req, res, next) {
+    if (contains.call(collection_list,req.params.collection_name)){
+        MongoClient.connect(url, function(err, db) {
+            if (err) res.json(err);
+            var dbo = db.db(db_name);
+            dbo.collection(req.params.collection_name).findOne({},{_id : req.params.data_id}, function(error, result) {
+                if (error) res.json(error);
+                res.json(result);
+                db.close();
+            });
+        });
+    }else {
+        res.json({
+            RESULT : "No Table Found",
+            RESULT_CODE : 1081
+        })
+    }
+});
 router.get('/read/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+            if (err) res.json(err);
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).find({}).toArray(function(error, result) {
                 if (error) {res.json(error);}
@@ -76,7 +74,7 @@ router.get('/read/:collection_name', function(req, res, next) {
 router.get('/read/:collection_name/:skip/:limit', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+            if (err) res.json(err);
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).find({}).skip(parseInt(req.params.skip)).limit(parseInt(req.params.limit)).toArray(function(error, result) {
                 if (error) {res.json(error);}
@@ -97,7 +95,7 @@ router.get('/read/:collection_name/:skip/:limit', function(req, res, next) {
 router.get('/get_numbers/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+            if (err) res.json(err);
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).count({}, function(error, numOfDocs) {
                 if (error) res.json(error);
@@ -114,7 +112,7 @@ router.get('/get_numbers/:collection_name', function(req, res, next) {
 router.post('/create/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+            if (err) res.json(err);
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).insertOne(JSON.parse(req.body.data), function(error, result) {
                 if (error) {res.json(error);}
@@ -135,7 +133,7 @@ router.post('/create/:collection_name', function(req, res, next) {
 router.post('/create_many/:collection_name', function(req, res, next) {
     if (contains.call(collection_list,req.params.collection_name)){
         MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+            if (err) res.json(err);
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).insertMany(JSON.parse(req.body.data), function(error, result) {
                 if (error) {res.json(error);}
