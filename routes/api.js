@@ -38,7 +38,7 @@ router.get('/read/:collection_name/:data_id', function(req, res, next) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection(req.params.collection_name).find({"_id":req.params.data_id}).toArray(function(error, result) {
+            dbo.collection(req.params.collection_name).find({_id : req.params.data_id}).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     res.json(result);
