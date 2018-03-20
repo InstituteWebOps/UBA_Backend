@@ -58,7 +58,7 @@ router.get('/read/:collection_name/:skip/:limit', function(req, res, next) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection(req.params.collection_name).find({}).skip(req.params.skip).limit(req.params.skip).toArray(function(error, result) {
+            dbo.collection(req.params.collection_name).find({}).skip(parseInt(req.params.skip)).limit(parseInt(req.params.limit)).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     res.json(result);
