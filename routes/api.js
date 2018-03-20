@@ -157,7 +157,7 @@ router.post('/update/:collection_name/:data_id', function(req, res, next) {
         MongoClient.connect(url, function(err, db) {
             if (err) res.json(err);
             var dbo = db.db(db_name);
-            dbo.collection(req.params.collection_name).updateOne({"_id" : new ObjectId(req.params.data_id)},JSON.parse(req.body.data), function(error, result) {
+            dbo.collection(req.params.collection_name).updateOne({"_id" : new ObjectId(req.params.data_id)},{$set:JSON.parse(req.body.data)}, function(error, result) {
                 if (error) res.json(error);
                 res.json(result);
                 db.close();
@@ -175,7 +175,7 @@ router.post('/create_many/:collection_name', function(req, res, next) {
         MongoClient.connect(url, function(err, db) {
             if (err) res.json(err);
             var dbo = db.db(db_name);
-            dbo.collection(req.params.collection_name).insertMany({ $set:JSON.parse(req.body.data)}, function(error, result) {
+            dbo.collection(req.params.collection_name).insertMany(JSON.parse(req.body.data), function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     console.log(req.body.data);
