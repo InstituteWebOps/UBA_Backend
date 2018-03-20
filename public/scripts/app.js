@@ -40,8 +40,8 @@ var main_app = new Vue({
             this.download_css(window.location.origin+"/stylesheets/style.css");
             this.download_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
 
-            this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
             this.download_js("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js");
+            this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
         },
         get_numbers: function(){
             axios.get(window.location.origin+'/api/get_numbers/data')
