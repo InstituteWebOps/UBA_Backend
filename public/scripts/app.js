@@ -63,6 +63,20 @@ var main_app = new Vue({
                         console.log(error);
                     });
             },
+            delete_data: function (item) {
+                if (confirm("Do you want to delete "+item.submitted_by+"'s data ?")) {
+                    axios.get(window.location.origin+'/api/delete/data/'+item._id)
+                        .then(function (response) {
+                            console.log("data deleted!");
+                        })
+                        .catch(function (error) {
+                            console.log("network error!");
+                        });
+                } else {
+                    console.log("pressed cancel button");
+                }
+
+            },
         syntaxHighlight :function(json) {
             if (typeof json !== 'string') {
                 json = JSON.stringify(json, undefined, 2);
