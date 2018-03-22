@@ -68,9 +68,10 @@ var main_app = new Vue({
                     axios.get(window.location.origin+'/api/delete/data/'+item._id)
                         .then(function (response) {
                             console.log("data deleted!");
+                            location.reload();
                         })
                         .catch(function (error) {
-                            console.log("network error!");
+                            alert("network error!");
                         });
                 } else {
                     console.log("pressed cancel button");
