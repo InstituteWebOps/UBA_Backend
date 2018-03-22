@@ -45,15 +45,13 @@
           </thead>
           <tbody v-for="item in data_list">
           <tr>
-            <a @click="show_item(item)" href="#" data-toggle="modal" data-target="#myModal">
             <td style="font-family: 'Open Sans', sans-serif;" v-html="item._id"></td>
             <td v-html="item.submitted_by"></td>
             <td>
-              <!--<button  class="btn btn-primary">Read</button>-->
+              <button @click="show_item(item)" href="#" data-toggle="modal" data-target="#myModal" class="btn btn-primary">Read</button>
               <!--<button class="btn btn-success"> Edit</button> -->
               <button class="btn btn-danger" @click="delete_data(item)"> Delete</button>
             </td>
-            </a>
           </tr>
           </tbody>
         </table>
