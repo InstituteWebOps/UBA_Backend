@@ -57,8 +57,7 @@ var main_app = new Vue({
             show_item : function (item) {
                 axios.get(window.location.origin+'/api/read/data/'+item._id)
                     .then(function (response) {
-                        main_app.details = response;
-                        console.log(item._id);
+                        main_app.details = main_app.syntaxHighlight(response.data);
                     })
                     .catch(function (error) {
                         console.log(error);
