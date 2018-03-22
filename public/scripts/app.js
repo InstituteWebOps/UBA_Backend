@@ -1,62 +1,89 @@
 var main_app = new Vue({
-    el: '#main',
-    data: {
-        isLoading  : true,
-        number_of_data : null,
-        skip: 0,
-        limit: 20,
-        isNext: false,
-        isPrevious: false,
-        data_list : []
-    },
-    methods: {
-        download_css: function(src) {
-            var giftofspeed = document.createElement('link');
-            giftofspeed.rel = 'stylesheet';
-            giftofspeed.href = src;
-            giftofspeed.type = 'text/css';
-            var godefer = document.getElementsByTagName('link')[0];
-            godefer.parentNode.insertBefore(giftofspeed, godefer);
+        el: '#main',
+        data: {
+            isLoading  : true,
+            number_of_data : null,
+            data_list : null,
+            details : null
         },
-        download_icon: function(src) {
-            var giftofspeed = document.createElement('link');
-            giftofspeed.rel = 'shortcut icon';
-            giftofspeed.href = src;
-            var godefer = document.getElementsByTagName('link')[0];
-            godefer.parentNode.insertBefore(giftofspeed, godefer);
-        },
-        downloadJSAtOnload : function(src) {
-            var element = document.createElement("script");
-            element.src = src;
-            document.body.appendChild(element);
-        },
-        download_js :function(src) {
-            if (window.addEventListener){
-                window.addEventListener("load", this.downloadJSAtOnload(src), false);
-            }
-            else if (window.attachEvent){
-                window.attachEvent("onload", this.downloadJSAtOnload(src));
-            }
-            else window.onload = this.downloadJSAtOnload(src);
-        },
-        load_components: function(){
-            this.download_icon(window.location.origin+"/imges/logo.png");
+        methods: {
+            download_css: function(src) {
+                var giftofspeed = document.createElement('link');
+                giftofspeed.rel = 'stylesheet';
+                giftofspeed.href = src;
+                giftofspeed.type = 'text/css';
+                var godefer = document.getElementsByTagName('link')[0];
+                godefer.parentNode.insertBefore(giftofspeed, godefer);
+            },
+            download_icon: function(src) {
+                var giftofspeed = document.createElement('link');
+                giftofspeed.rel = 'shortcut icon';
+                giftofspeed.href = src;
+                var godefer = document.getElementsByTagName('link')[0];
+                godefer.parentNode.insertBefore(giftofspeed, godefer);
+            },
+            downloadJSAtOnload : function(src) {
+                var element = document.createElement("script");
+                element.src = src;
+                document.body.appendChild(element);
+            },
+            download_js :function(src) {
+                if (window.addEventListener){
+                    window.addEventListener("load", this.downloadJSAtOnload(src), false);
+                }
+                else if (window.attachEvent){
+                    window.attachEvent("onload", this.downloadJSAtOnload(src));
+                }
+                else window.onload = this.downloadJSAtOnload(src);
+            },
+            load_components: function(){
+                this.download_icon(window.location.origin+"/imges/logo.png");
 
-            this.download_css(window.location.origin+"/stylesheets/style.css");
-            this.download_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+                this.download_css(window.location.origin+"/stylesheets/style.css");
+                this.download_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
 
-            this.download_js("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js");
-            this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
-        },
-        get_data: function (skip,limit) {
-            axios.get(window.location.origin+'/api/read/data/'+skip+"/"+limit)
-                .then(function (response) {
-                    main_app.data_list = response.data;
-                    console.log(main_app.data_list[0].submitted_by);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                this.download_js("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js");
+                this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
+            },
+            get_data: function (skip,limit) {
+                axios.get(window.location.origin+'/api/read/data/')
+                    .then(function (response) {
+                        main_app.data_list = response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            show_item : function (item) {
+                axios.get(window.location.origin+'/api/read/data/'+item._id)
+                    .then(function (response) {
+                        main_app.details = response;
+                        console.log(item._id);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+        syntaxHighlight :function(json) {
+            if (typeof json !== 'string') {
+                json = JSON.stringify(json, undefined, 2);
+            }
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
         },
         get_numbers: function(){
             axios.get(window.location.origin+'/api/get_numbers/data')
@@ -77,9 +104,9 @@ var main_app = new Vue({
 
     },
     mounted: function () {
-        this.load_components();
-        this.isLoading = !this.isLoading;
-        this.get_numbers();
-        this.get_data(this.skip,this.limit);
-    }
+    this.load_components();
+    this.isLoading = !this.isLoading;
+    this.get_numbers();
+    this.get_data(this.skip,this.limit);
+}
 });
