@@ -1,12 +1,16 @@
 var main_app = new Vue({
         el: '#main',
         data: {
+            is_showing: false,
             isLoading  : true,
             number_of_data : null,
             data_list : null,
             details : null
         },
         methods: {
+            close_data : function () {
+              this.is_showing = !this.is_showing;
+            },
             download_css: function(src) {
                 var giftofspeed = document.createElement('link');
                 giftofspeed.rel = 'stylesheet';
@@ -55,6 +59,7 @@ var main_app = new Vue({
                     });
             },
             show_item : function (item) {
+                this.is_showing = !this.is_showing;
                 axios.get(window.location.origin+'/api/read/data/'+item._id)
                     .then(function (response) {
                         main_app.details = main_app.syntaxHighlight(response.data);
