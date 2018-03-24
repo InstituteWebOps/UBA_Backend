@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
-// var url = "mongodb://joeydash:joeydash@ds135790.mlab.com:35790/joeydash";
 var url = "mongodb://localhost:27017/";
 var db_name = "UBA_DB";
 // var db_name = "joeydash";
+// var url = "mongodb://joeydash:joeydash@ds135790.mlab.com:35790/joeydash";
 var collection_list = ["data"];
 var contains = function(needle) {
     var findNaN = needle !== needle;
@@ -80,6 +80,26 @@ router.get('/read/:collection_name', function(req, res, next) {
             if (err) throw err;
             var dbo = db.db(db_name);
             dbo.collection(req.params.collection_name).find({}).toArray(function(error, result) {
+                if (error) {res.json(error);}
+                else{
+                    res.json(result);
+                    db.close();
+                }
+            });
+        });
+    }else {
+        res.json({
+            RESULT : "No Table Found",
+            RESULT_CODE : 1081
+        })
+    }
+});
+router.get('/read_mini/:collection_name', function(req, res, next) {
+    if (contains.call(collection_list,req.params.collection_name)){
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db(db_name);
+            dbo.collection(req.params.collection_name).find({},{"submitted_by":1}).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     res.json(result);
