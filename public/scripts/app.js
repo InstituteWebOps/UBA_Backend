@@ -51,7 +51,7 @@ var main_app = new Vue({
             this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
         },
         get_data: function (skip,limit) {
-            axios.get(window.location.origin+'/api/read_mini/data/')
+            axios.get(window.location.origin+'/api/read/data/')
                 .then(function (response) {
                     main_app.data_list = response.data;
                 })
