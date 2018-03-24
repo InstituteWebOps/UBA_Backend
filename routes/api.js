@@ -3,8 +3,8 @@ var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 var db_name = "UBA_DB";
-// var db_name = "joeydash";
 // var url = "mongodb://joeydash:joeydash@ds135790.mlab.com:35790/joeydash";
+// var db_name = "joeydash";
 var collection_list = ["data"];
 var contains = function(needle) {
     var findNaN = needle !== needle;
@@ -99,7 +99,7 @@ router.get('/read_mini/:collection_name', function(req, res, next) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection(req.params.collection_name).find({},{"submitted_by":1}).toArray(function(error, result) {
+            dbo.collection(req.params.collection_name).find({}).project({submitted_by: 1}).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     res.json(result);
