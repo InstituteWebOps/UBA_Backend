@@ -42,9 +42,9 @@ var main_app = new Vue({
             else window.onload = this.downloadJSAtOnload(src);
         },
         load_components: function(){
-            this.download_icon(window.location.origin+"/UBA/imges/logo.png");
+            this.download_icon(window.location.origin+"/imges/logo.png");
 
-            this.download_css(window.location.origin+"/UBA/stylesheets/style.css");
+            this.download_css(window.location.origin+"/stylesheets/style.css");
             this.download_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
 
             this.download_js("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js");
