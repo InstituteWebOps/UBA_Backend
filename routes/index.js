@@ -5,6 +5,9 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index');
 });
+router.get('/show_each_data/:_id', function(req, res, next) {
+    res.render('show_each_data',{_id: req.params._id});
+});
 
 
 module.exports = router;

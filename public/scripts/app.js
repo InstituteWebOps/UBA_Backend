@@ -1,16 +1,13 @@
 var main_app = new Vue({
     el: '#main',
     data: {
-        is_showing: false,
         isLoading  : true,
-        number_of_data : null,
-        data_list : null,
-        details : null,
-        is_mobile : true
+        number_of_data : 0,
+        data_list : null
     },
     methods: {
-        close_data : function () {
-            this.is_showing = !this.is_showing;
+        show_data : function(_id) {
+            window.location = "/show_each_data/"+_id;
         },
         download_css: function(src) {
             var giftofspeed = document.createElement('link');
@@ -51,22 +48,10 @@ var main_app = new Vue({
             this.download_js("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js");
             this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
         },
-        get_data: function (skip,limit) {
+        get_all_data: function () {
             axios.get(window.location.origin+'/api/read/data/')
                 .then(function (response) {
                     main_app.data_list = response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-        show_item : function (item) {
-            if (this.is_mobile==true){
-                this.is_showing = !this.is_showing;
-            }
-            axios.get(window.location.origin+'/api/read/data/'+item._id)
-                .then(function (response) {
-                    main_app.details = main_app.syntaxHighlight(response.data);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -102,27 +87,6 @@ var main_app = new Vue({
                 this.is_mobile = ! this.is_mobile;
             }
         },
-        syntaxHighlight :function(json) {
-            if (typeof json !== 'string') {
-                json = JSON.stringify(json, undefined, 2);
-            }
-            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                var cls = 'number';
-                if (/^"/.test(match)) {
-                    if (/:$/.test(match)) {
-                        cls = 'key';
-                    } else {
-                        cls = 'string';
-                    }
-                } else if (/true|false/.test(match)) {
-                    cls = 'boolean';
-                } else if (/null/.test(match)) {
-                    cls = 'null';
-                }
-                return '<span class="' + cls + '">' + match + '</span>';
-            });
-        },
         get_numbers: function(){
             axios.get(window.location.origin+'/api/get_numbers/data')
                 .then(function (response) {
@@ -142,10 +106,9 @@ var main_app = new Vue({
 
     },
     mounted: function () {
-        this.check_mobile();
         this.load_components();
         this.isLoading = !this.isLoading;
         this.get_numbers();
-        this.get_data(this.skip,this.limit);
+        this.get_all_data();
     }
 });

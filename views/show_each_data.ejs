@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="en"><html> <head>  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Unnat Bharat Abhiyan</title> <link> <script src="https://unpkg.com/axios/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vue@2.5.14/dist/vue.min.js"></script> </head> <body> <div id="main" class="container-fluid"> <div id="loader" v-if="isLoading"> <div class="spinner"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1" width="32px" height="32px" viewBox="0 0 28 28"> <g class="qp-circular-loader"> <path class="qp-circular-loader-path" fill="none" d="M 14,1.5 A 12.5,12.5 0 1 1 1.5,14" stroke-linecap="round"/> </g> </svg> </div></div>
+
+
+    <div id="app" v-if="!isLoading" style="padding: 40px;">
+
+       <div class="container-fluid">
+           <div class="row">
+               <div class="col-sm-12">
+               </div>
+           </div>
+           <div class="row">
+               <div class="col-sm-12" v-if="data">
+                   <pre v-html="data"></pre>
+               </div>
+           </div>
+       </div>
+
+    </div>
+
+
+</div></body><style>.spinner{margin:10px 20px;text-align:center;display:inline-block}.spinner svg{background-color:rgb(255,255,255);border-radius:50%;padding:8px;box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)}.qp-circular-loader{width:64px;height:64px;stroke-width:3px}.qp-circular-loader-path{stroke-dasharray:58.9;stroke-dashoffset:58.9}.qp-circular-loader,.qp-circular-loader *{-webkit-transform-origin:50% 50%;transform-origin:50% 50%}@-webkit-keyframes rotate{from{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(360deg)}}@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}.qp-circular-loader{-webkit-animation-name:rotate;animation-name:rotate;-webkit-animation-duration:1568.63ms;animation-duration:1568.63ms;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-timing-function:linear;animation-timing-function:linear}@-webkit-keyframes fillunfill{from{stroke-dashoffset:58.8}50%{stroke-dashoffset:0}to{stroke-dashoffset:-58.4}}@keyframes fillunfill{from{stroke-dashoffset:58.8}50%{stroke-dashoffset:0}to{stroke-dashoffset:-58.4}}@-webkit-keyframes rot{from{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(-360deg)}}@keyframes rot{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}@-webkit-keyframes colors{0%{stroke:#754fa0}20%{stroke:#09b7bf}40%{stroke:#90d36b}60%{stroke:#f2d40d}80%{stroke:#fcb12b}100%{stroke:#ed1b72}}@keyframes colors{0%{stroke:#754fa0}20%{stroke:#09b7bf}40%{stroke:#90d36b}60%{stroke:#f2d40d}80%{stroke:#fcb12b}100%{stroke:#ed1b72}}.qp-circular-loader-path{-webkit-animation-name:fillunfill,rot,colors;animation-name:fillunfill,rot,colors;-webkit-animation-duration:1333ms,5332ms,5332ms;animation-duration:1333ms,5332ms,5332ms;-webkit-animation-iteration-count:infinite,infinite,infinite;animation-iteration-count:infinite,infinite,infinite;-webkit-animation-timing-function:cubic-bezier(.4,0,.2,1),steps(4),linear;animation-timing-function:cubic-bezier(.4,0,.2,1),steps(4),linear;-webkit-animation-play-state:running,running,running;animation-play-state:running,running,running;-webkit-animation-fill-mode:forwards;animation-fill-mode:forwards}</style>
+
+<script>
+    var show_each_data = new Vue({
+        el: '#main',
+        data: {
+            isLoading  : true,
+            data : null
+        },
+        methods: {
+            download_css: function(src) {
+                var giftofspeed = document.createElement('link');
+                giftofspeed.rel = 'stylesheet';
+                giftofspeed.href = src;
+                giftofspeed.type = 'text/css';
+                var godefer = document.getElementsByTagName('link')[0];
+                godefer.parentNode.insertBefore(giftofspeed, godefer);
+            },
+            download_icon: function(src) {
+                var giftofspeed = document.createElement('link');
+                giftofspeed.rel = 'shortcut icon';
+                giftofspeed.href = src;
+                giftofspeed.alt = "UBA icon";
+                var godefer = document.getElementsByTagName('link')[0];
+                godefer.parentNode.insertBefore(giftofspeed, godefer);
+            },
+            downloadJSAtOnload : function(src) {
+                var element = document.createElement("script");
+                element.src = src;
+                document.body.appendChild(element);
+            },
+            download_js :function(src) {
+                if (window.addEventListener){
+                    window.addEventListener("load", this.downloadJSAtOnload(src), false);
+                }
+                else if (window.attachEvent){
+                    window.attachEvent("onload", this.downloadJSAtOnload(src));
+                }
+                else window.onload = this.downloadJSAtOnload(src);
+            },
+            load_components: function(){
+                this.download_icon(window.location.origin+"/imges/logo.png");
+
+                this.download_css(window.location.origin+"/stylesheets/style.css");
+                this.download_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+
+                this.download_js("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js");
+                this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
+            },
+            show_item : function (_id) {
+                axios.get(window.location.origin+'/api/read/data/'+_id)
+                    .then(function (response) {
+                        show_each_data.data = show_each_data.syntaxHighlight(response.data);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            delete_data: function (item) {
+                if (confirm("Do you want to delete "+item.submitted_by+"'s data ?")) {
+                    axios.get(window.location.origin+'/api/delete/data/'+item._id)
+                        .then(function (response) {
+                            console.log("data deleted!");
+                            location.reload();
+                        })
+                        .catch(function (error) {
+                            alert("network error!");
+                        });
+                } else {
+                    console.log("pressed cancel button");
+                }
+
+            },
+            check_mobile :function() {
+                if( navigator.userAgent.match(/Android/i)
+                    || navigator.userAgent.match(/webOS/i)
+                    || navigator.userAgent.match(/iPhone/i)
+                    || navigator.userAgent.match(/iPad/i)
+                    || navigator.userAgent.match(/iPod/i)
+                    || navigator.userAgent.match(/BlackBerry/i)
+                    || navigator.userAgent.match(/Windows Phone/i)
+                ){
+                    console.log("this is a mobile")
+                }
+                else {
+                    this.is_mobile = ! this.is_mobile;
+                }
+            },
+            syntaxHighlight :function(json) {
+                if (typeof json !== 'string') {
+                    json = JSON.stringify(json, undefined, 2);
+                }
+                json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                    var cls = 'number';
+                    if (/^"/.test(match)) {
+                        if (/:$/.test(match)) {
+                            cls = 'key';
+                        } else {
+                            cls = 'string';
+                        }
+                    } else if (/true|false/.test(match)) {
+                        cls = 'boolean';
+                    } else if (/null/.test(match)) {
+                        cls = 'null';
+                    }
+                    return '<span class="' + cls + '">' + match + '</span>';
+                });
+            }
+
+        },
+        mounted: function () {
+            this.isLoading = !this.isLoading;
+            this.load_components();
+            this.show_item("<%=_id %>");
+        }
+    });
+</script></html>
