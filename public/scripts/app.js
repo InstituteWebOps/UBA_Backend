@@ -3,7 +3,8 @@ var main_app = new Vue({
     data: {
         isLoading  : true,
         number_of_data : 0,
-        data_list : null
+        data_list : null,
+        isFetching : false
     },
     methods: {
         show_data : function(_id) {
@@ -49,11 +50,15 @@ var main_app = new Vue({
             this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
         },
         get_all_data: function () {
+            this.isFetching = !this.isFetching;
             axios.get(window.location.origin+'/api/read/data/')
                 .then(function (response) {
+                    main_app.isFetching = !main_app.isFetching;
                     main_app.data_list = response.data;
                 })
                 .catch(function (error) {
+                    main_app.isFetching = !main_app.isFetching;
+                    alert("Network error!")
                     console.log(error);
                 });
         },
@@ -96,12 +101,6 @@ var main_app = new Vue({
                 .catch(function (error) {
                     console.log(error);
                 });
-        },
-        is_table_needed : function () {
-            if (this.data_list.size >0)
-                return true;
-            else
-                return false;
         }
 
     },

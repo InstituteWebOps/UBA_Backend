@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><html> <head>  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Unnat Bharat Abhiyan</title> <link> <script src="https://unpkg.com/axios/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vue@2.5.14/dist/vue.min.js"></script> </head> <body> <div id="main" class="container-fluid">
+<!DOCTYPE html><html lang="en"><html> <head>  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Unnat Bharat Abhiyan</title> <link> <script src="https://unpkg.com/axios/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vue@2.5.14/dist/vue.js"></script> </head> <body> <div id="main" class="container-fluid">
 
 
 
@@ -10,8 +10,24 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12" v-if="data">
-                    <pre v-html="data" class="card"></pre>
+                <div class="col-sm-12 card" v-if="data">
+                    <table class="table table-striped" >
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Submitted by</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody v-for="item in data">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!--<pre v-html="data" class="card"></pre>-->
                 </div>
             </div>
         </div>
@@ -36,6 +52,11 @@
             data : null
         },
         methods: {
+            get_keys:function () {
+                var keys = [];
+                for(var k in this.data[0]) keys.push(k);
+                console.log(keys);
+            },
             download_css: function(src) {
                 var giftofspeed = document.createElement('link');
                 giftofspeed.rel = 'stylesheet';
@@ -75,12 +96,13 @@
                 this.download_js("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js");
                 this.download_js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
             },
-            show_item : function (_id) {
+            load_all_data : function () {
                 this.isFetching = !this.isFetching;
-                axios.get(window.location.origin+'/api/read/data/'+_id)
+                axios.get(window.location.origin+'/api/read/data')
                     .then(function (response) {
                         show_each_data.isFetching = !show_each_data.isFetching;
                         show_each_data.data = show_each_data.syntaxHighlight(response.data);
+                        show_each_data.get_keys();
                     })
                     .catch(function (error) {
                         show_each_data.isFetching = !show_each_data.isFetching;
@@ -144,7 +166,7 @@
         mounted: function () {
             this.isLoading = !this.isLoading;
             this.load_components();
-            this.show_item("<%=_id %>");
+            this.load_all_data();
         }
     });
 </script></html>
