@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
+var json2xls = require('json2xls');
+var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
-var db_name = "UBA_DB";
-// var url = "mongodb://joeydash:joeydash@ds135790.mlab.com:35790/joeydash";
-// var db_name = "joeydash";
+// var url = "mongodb://localhost:27017/";
+// var db_name = "UBA_DB";
+var url = "mongodb://joeydash:joeydash@ds135790.mlab.com:35790/joeydash";
+var db_name = "joeydash";
 var collection_list = ["data"];
 var contains = function(needle) {
     var findNaN = needle !== needle;
@@ -213,6 +215,33 @@ router.post('/create_many/:collection_name', function(req, res, next) {
         })
     }
 });
+
+router.get('/refresh_xlsx_data', function(req, res, next) {
+    if (contains.call(collection_list,"data")){
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db(db_name);
+            dbo.collection("data").find({}).toArray(function(error, result) {
+                if (error) {res.json(error);}
+                else{
+                    // result = JSON.parse(result);
+                    // console.log(result[0].agriculturalInputsModal);
+                    var xls = json2xls(result);
+                    fs.writeFileSync('./public/data/data.xlsx', xls, 'binary');
+                    res.redirect("/data/data.xlsx");
+                    db.close();
+
+                }
+            });
+        });
+    }else {
+        res.json({
+            RESULT : "No Table Found",
+            RESULT_CODE : 1081
+        })
+    }
+});
+
 
 
 

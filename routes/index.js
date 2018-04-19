@@ -12,5 +12,4 @@ router.get('/see_all/', function(req, res, next) {
     res.render('see_all');
 });
 
-
 module.exports = router;
