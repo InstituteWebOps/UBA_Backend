@@ -273,7 +273,7 @@ router.get('/get_all_data_json', function(req, res, next) {
             dbo.collection("data").find({}).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
-                    fs.writeFileSync('./public/data/all_data.json', result, 'binary');
+                    fs.writeFileSync('./public/data/all_data.json', JSON.stringify(result), 'binary');
                     res.redirect("/data/all_data.json");
                     db.close();
 
