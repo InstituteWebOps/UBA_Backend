@@ -265,6 +265,28 @@ router.get('/get_xlsx_ND', function(req, res, next) {
     }
 });
 
+router.get('/get_all_data_json', function(req, res, next) {
+    if (contains.call(collection_list,"data")){
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db(db_name);
+            dbo.collection("data").find({}).toArray(function(error, result) {
+                if (error) {res.json(error);}
+                else{
+                    fs.writeFileSync('./public/data/all_data.json', result, 'binary');
+                    res.redirect("/data/all_data.json");
+                    db.close();
+
+                }
+            });
+        });
+    }else {
+        res.json({
+            RESULT : "No Table Found",
+            RESULT_CODE : 1081
+        })
+    }
+});
 
 function create_ND_json(data) {
     var ND_data = [];
