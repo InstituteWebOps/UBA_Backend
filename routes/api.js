@@ -217,7 +217,7 @@ router.post('/create_many/:collection_name', function(req, res, next) {
 });
 
 router.get('/get_xlxs_full', function(req, res, next) {
-    if (contains.call(collection_list,"data")){
+    if (contains.call(collection_list,"real_data")){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
@@ -242,7 +242,7 @@ router.get('/get_xlxs_full', function(req, res, next) {
 
 
 router.get('/get_xlsx_ND', function(req, res, next) {
-    if (contains.call(collection_list,"data")){
+    if (contains.call(collection_list,"real_data")){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
@@ -266,7 +266,7 @@ router.get('/get_xlsx_ND', function(req, res, next) {
 });
 
 router.get('/get_all_data_json', function(req, res, next) {
-    if (contains.call(collection_list,"data")){
+    if (contains.call(collection_list,"real_data")){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);

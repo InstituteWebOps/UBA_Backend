@@ -51,7 +51,7 @@ var main_app = new Vue({
         },
         get_all_data: function () {
             this.isFetching = !this.isFetching;
-            axios.get(window.location.origin+'/api/read/data/')
+            axios.get(window.location.origin+'/api/read/real_data/')
                 .then(function (response) {
                     main_app.isFetching = !main_app.isFetching;
                     main_app.data_list = response.data;
@@ -64,7 +64,7 @@ var main_app = new Vue({
         },
         delete_data: function (item) {
             if (confirm("Do you want to delete "+item.submitted_by+"'s data ?")) {
-                axios.get(window.location.origin+'/api/delete/data/'+item._id)
+                axios.get(window.location.origin+'/api/delete/real_data/'+item._id)
                     .then(function (response) {
                         console.log("data deleted!");
                         location.reload();
@@ -93,7 +93,7 @@ var main_app = new Vue({
             }
         },
         get_numbers: function(){
-            axios.get(window.location.origin+'/api/get_numbers/data')
+            axios.get(window.location.origin+'/api/get_numbers/real_data')
                 .then(function (response) {
                     main_app.number_of_data = parseInt(response.data.number_of_data);
                     // console.log(response.data.number_of_data);

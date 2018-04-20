@@ -77,7 +77,7 @@
             },
             show_item : function (_id) {
                 this.isFetching = !this.isFetching;
-                axios.get(window.location.origin+'/api/read/data/'+_id)
+                axios.get(window.location.origin+'/api/read/real_data/'+_id)
                     .then(function (response) {
                         show_each_data.isFetching = !show_each_data.isFetching;
                         show_each_data.data = show_each_data.syntaxHighlight(response.data);
@@ -90,7 +90,7 @@
             },
             delete_data: function (item) {
                 if (confirm("Do you want to delete "+item.submitted_by+"'s data ?")) {
-                    axios.get(window.location.origin+'/api/delete/data/'+item._id)
+                    axios.get(window.location.origin+'/api/delete/real_data/'+item._id)
                         .then(function (response) {
                             console.log("data deleted!");
                             location.reload();
