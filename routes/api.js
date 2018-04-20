@@ -7,7 +7,7 @@ var url = "mongodb://localhost:27017/";
 var db_name = "UBA_DB";
 // var url = "mongodb://joeydash:joeydash@ds135790.mlab.com:35790/joeydash";
 // var db_name = "joeydash";
-var collection_list = ["data"];
+var collection_list = ["data","real_data"];
 var contains = function(needle) {
     var findNaN = needle !== needle;
     var indexOf;
