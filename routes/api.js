@@ -221,7 +221,7 @@ router.get('/get_xlxs_full', function(req, res, next) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection("data").find({}).toArray(function(error, result) {
+            dbo.collection("real_data").find({}).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     var xls = json2xls(result);
@@ -246,7 +246,7 @@ router.get('/get_xlsx_ND', function(req, res, next) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection("data").find({}).toArray(function(error, result) {
+            dbo.collection("real_data").find({}).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     var xls = json2xls(create_ND_json(result));
@@ -270,7 +270,7 @@ router.get('/get_all_data_json', function(req, res, next) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db(db_name);
-            dbo.collection("data").find({}).toArray(function(error, result) {
+            dbo.collection("real_data").find({}).toArray(function(error, result) {
                 if (error) {res.json(error);}
                 else{
                     fs.writeFileSync('./public/data/all_data.json', JSON.stringify(result), 'binary');
